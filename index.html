@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Soal MA Plus Keterampilan</title>
+    <style>
+      body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; padding: 20px; display: flex; justify-content: center; }
+      .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+      h2 { text-align: center; color: #333; margin-top: 0; }
+      .form-group { margin-bottom: 20px; }
+      label { display: block; font-weight: bold; margin-bottom: 8px; color: #555; }
+      select, button { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #ddd; font-size: 16px; box-sizing: border-box; }
+      button { background-color: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; transition: background 0.3s; margin-top: 10px; }
+      button:hover { background-color: #218838; }
+      button:disabled { background-color: #6c757d; cursor: not-allowed; }
+      #status { margin-top: 20px; font-weight: bold; text-align: center; }
+      .loading { color: #007bff; }
+      .success a { color: #28a745; text-decoration: none; border-bottom: 2px solid #28a745; padding-bottom: 2px;}
+      .error { color: #dc3545; }
+    </style>
+  </head>
+  <body>
+    
+    <div class="container">
+      <h2>Buat Soal MA Keterampilan</h2>
+      
+      <div class="form-group">
+        <label>Mata Pelajaran:</label>
+        <select id="mapel">
+          <option value="Tata Busana">Tata Busana</option>
+          <option value="Teknik Komputer Jaringan">Teknik Komputer Jaringan</option>
+          <option value="Agribisnis">Agribisnis</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Kelas:</label>
+        <select id="kelas">
+          <option value="X">Kelas X</option>
+          <option value="XI">Kelas XI</option>
+          <option value="XII">Kelas XII</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Tingkat Kesulitan:</label>
+        <select id="kesulitan">
+          <option value="Mudah (LOTS)">Mudah (LOTS)</option>
+          <option value="Sedang (MOTS)">Sedang (MOTS)</option>
+          <option value="Sulit (HOTS)">Sulit (HOTS)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Butuh Gambar?</label>
+        <select id="gambar">
+          <option value="Tidak">Tidak</option>
+          <option value="Ya">Ya</option>
+        </select>
+      </div>
+
+      <button onclick="kirimData()" id="btnSubmit">Generate & Unduh (Word)</button>
+      <div id="status"></div>
+    </div>
+
+    <script>
+      // GANTI URL INI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
+      const API_URL = 'https://script.google.com/macros/s/AKfycbztpoGFzkknQX9nnJxYVrKE2ikQKOz8fwBp9ZK53XsIXkDmdDLDFM6hopNyxp6_bM_M6g/exec';
+
+      async function kirimData() {
+        const statusDiv = document.getElementById('status');
+        const btnSubmit = document.getElementById('btnSubmit');
+        
+        statusDiv.className = 'loading';
+        statusDiv.innerHTML = 'AI sedang menganalisis dan menyusun soal...';
+        btnSubmit.disabled = true;
+
+        const payloadData = {
+          mapel: document.getElementById('mapel').value,
+          kelas: document.getElementById('kelas').value,
+          kesulitan: document.getElementById('kesulitan').value,
+          gambar: document.getElementById('gambar').value
+        };
+
+        try {
+          const response = await fetch(API_URL, {
+            method: 'POST',
+            // Gunakan text/plain untuk menghindari pemblokiran CORS dari Apps Script
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payloadData)
+          });
+
+          const result = await response.json();
+
+          if (result.status === 'sukses') {
+            statusDiv.className = 'success';
+            statusDiv.innerHTML = `<a href="${result.url}" target="_blank">✅ Soal Selesai! Klik di sini untuk Download Word</a>`;
+          } else {
+            statusDiv.className = 'error';
+            statusDiv.innerHTML = '❌ Gagal: ' + result.pesan;
+          }
+        } catch (error) {
+          statusDiv.className = 'error';
+          statusDiv.innerHTML = '❌ Terjadi kesalahan koneksi sistem.';
+          console.error(error);
+        } finally {
+          btnSubmit.disabled = false;
+        }
+      }
+    </script>
+  </body>
+</html>
