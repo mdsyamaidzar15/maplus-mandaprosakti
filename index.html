@@ -26,11 +26,9 @@
       <h2>Buat Soal MA Keterampilan</h2>
       
       <div class="form-group">
-        <label>Mata Pelajaran:</label>
+        <label>Mata Pelajaran (Dari Database):</label>
         <select id="mapel">
-          <option value="Tata Busana">Tata Busana</option>
-          <option value="Teknik Komputer Jaringan">Teknik Komputer Jaringan</option>
-          <option value="Agribisnis">Agribisnis</option>
+          <option value="">Memuat mata pelajaran...</option>
         </select>
       </div>
 
@@ -53,6 +51,16 @@
       </div>
 
       <div class="form-group">
+        <label>Jumlah Soal:</label>
+        <select id="jumlahSoal">
+          <option value="5">5 Soal</option>
+          <option value="10">10 Soal</option>
+          <option value="15">15 Soal</option>
+          <option value="20">20 Soal</option>
+        </select>
+      </div>
+
+      <div class="form-group">
         <label>Butuh Gambar?</label>
         <select id="gambar">
           <option value="Tidak">Tidak</option>
@@ -60,33 +68,61 @@
         </select>
       </div>
 
-      <button onclick="kirimData()" id="btnSubmit">Generate & Unduh (Word)</button>
+      <button onclick="kirimData()" id="btnSubmit" disabled>Mempersiapkan Sistem...</button>
       <div id="status"></div>
     </div>
 
     <script>
-      // GANTI URL INI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
+      // GANTI DENGAN URL WEB APP APPS SCRIPT ANDA
       const API_URL = 'https://script.google.com/macros/s/AKfycbztpoGFzkknQX9nnJxYVrKE2ikQKOz8fwBp9ZK53XsIXkDmdDLDFM6hopNyxp6_bM_M6g/exec';
+
+      // Fungsi Otomatis Mengambil Data Mapel dari Google Sheets saat Web dibuka
+      window.onload = async function() {
+        const mapelSelect = document.getElementById('mapel');
+        const btnSubmit = document.getElementById('btnSubmit');
+        
+        try {
+          const response = await fetch(API_URL);
+          const result = await response.json();
+          
+          if(result.status === 'sukses' && result.data.length > 0) {
+            mapelSelect.innerHTML = ''; // Kosongkan text loading
+            result.data.forEach(mapel => {
+              let opt = document.createElement('option');
+              opt.value = mapel;
+              opt.innerHTML = mapel;
+              mapelSelect.appendChild(opt);
+            });
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = 'Generate & Unduh (Word)';
+          } else {
+            mapelSelect.innerHTML = '<option value="">Gagal memuat database mapel</option>';
+          }
+        } catch (error) {
+          mapelSelect.innerHTML = '<option value="">Kesalahan koneksi database</option>';
+          console.error(error);
+        }
+      };
 
       async function kirimData() {
         const statusDiv = document.getElementById('status');
         const btnSubmit = document.getElementById('btnSubmit');
         
         statusDiv.className = 'loading';
-        statusDiv.innerHTML = 'AI sedang menganalisis dan menyusun soal...';
+        statusDiv.innerHTML = 'AI sedang merancang soal berdasarkan database...';
         btnSubmit.disabled = true;
 
         const payloadData = {
           mapel: document.getElementById('mapel').value,
           kelas: document.getElementById('kelas').value,
           kesulitan: document.getElementById('kesulitan').value,
+          jumlahSoal: document.getElementById('jumlahSoal').value,
           gambar: document.getElementById('gambar').value
         };
 
         try {
           const response = await fetch(API_URL, {
             method: 'POST',
-            // Gunakan text/plain untuk menghindari pemblokiran CORS dari Apps Script
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(payloadData)
           });
@@ -95,7 +131,7 @@
 
           if (result.status === 'sukses') {
             statusDiv.className = 'success';
-            statusDiv.innerHTML = `<a href="${result.url}" target="_blank">✅ Soal Selesai! Klik di sini untuk Download Word</a>`;
+            statusDiv.innerHTML = `<a href="${result.url}" target="_blank">✅ Soal Selesai & Tercatat! Klik untuk Download</a>`;
           } else {
             statusDiv.className = 'error';
             statusDiv.innerHTML = '❌ Gagal: ' + result.pesan;
@@ -103,7 +139,6 @@
         } catch (error) {
           statusDiv.className = 'error';
           statusDiv.innerHTML = '❌ Terjadi kesalahan koneksi sistem.';
-          console.error(error);
         } finally {
           btnSubmit.disabled = false;
         }
