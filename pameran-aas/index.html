@@ -5,13 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pameran Karya Prodistik MAN 2 Probolinggo</title>
   
-  <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- AOS Animation CSS -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
   <script>
@@ -32,7 +29,6 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans antialiased selection:bg-brand-teal selection:text-white">
 
-  <!-- 1. NAVBAR -->
   <header class="bg-white sticky top-0 z-40 border-b border-gray-100 shadow-sm transition-all duration-300">
     <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -43,9 +39,7 @@
     </div>
   </header>
 
-  <!-- 2. BREADCRUMBS & HERO BANNER -->
   <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-4">
-    <!-- Breadcrumbs -->
     <nav class="text-xs sm:text-sm text-gray-500 font-medium mb-4" data-aos="fade-right">
       <a href="#" class="hover:text-brand-teal">Beranda</a> 
       <span class="mx-2 text-gray-300">/</span> 
@@ -54,9 +48,7 @@
       <span class="text-gray-900">Karya Terbaru</span>
     </nav>
 
-    <!-- Hero Banner -->
     <div data-aos="zoom-in" data-aos-duration="800" class="bg-brand-dark rounded-3xl p-8 md:p-12 mb-8 flex flex-col md:flex-row items-center justify-between relative overflow-hidden shadow-2xl">
-      <!-- Teks Utama -->
       <div class="relative z-10 md:w-2/3 text-left">
         <span class="inline-block bg-brand-teal/20 text-brand-teal text-xs font-bold px-3 py-1 rounded-full tracking-wider mb-4 border border-brand-teal/30 uppercase">
           Koleksi Terbaru
@@ -70,7 +62,6 @@
         </button>
       </div>
       
-      <!-- Tempat Logo -->
       <div class="relative z-10 flex flex-row md:flex-col gap-4 mt-8 md:mt-0 justify-center items-center">
         <div class="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/10 shadow-xl transform hover:scale-105 transition-transform duration-300">
           <img src="https://drive.google.com/thumbnail?id=1-Pngy_8WHLtW7JK81GRwTS5ZXQw0F9Rp" alt="Logo MAN 2" class="h-20 md:h-24 object-contain">
@@ -80,15 +71,12 @@
         </div>
       </div>
       
-      <!-- Efek Cahaya -->
       <div class="absolute top-[-20%] right-[-10%] w-96 h-96 bg-brand-teal/20 rounded-full blur-[100px] pointer-events-none"></div>
     </div>
   </div>
 
-  <!-- 3. MAIN LAYOUT (SIDEBAR & GRID) -->
   <div id="katalog" class="max-w-[1400px] mx-auto px-4 md:px-8 pb-20 scroll-mt-24">
     
-    <!-- Tombol Toggle Filter untuk Mobile -->
     <button onclick="toggleMobileFilters()" class="w-full lg:hidden bg-white border border-gray-200 text-[#0b211e] font-bold py-3 px-5 rounded-2xl mb-6 shadow-sm flex justify-between items-center hover:bg-gray-50 transition-colors">
       <span class="flex items-center gap-2"><i class="fa-solid fa-sliders text-brand-teal"></i> Filter & Pencarian</span>
       <i id="filterIcon" class="fa-solid fa-chevron-down transition-transform duration-300"></i>
@@ -96,10 +84,8 @@
 
     <div class="flex flex-col lg:flex-row gap-8">
       
-      <!-- SIDEBAR FILTERS -->
       <aside id="sidebarFilters" class="w-full lg:w-64 flex-shrink-0 hidden lg:block bg-white lg:bg-transparent p-5 lg:p-0 rounded-2xl shadow-md lg:shadow-none border border-gray-100 lg:border-none mb-6 lg:mb-0 transition-all duration-300">
         
-        <!-- Search Bar Terintegrasi Sidebar -->
         <div class="mb-8 relative">
           <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
           <input type="text" id="searchInput" onkeyup="applyFilters()" class="w-full bg-gray-50 border border-gray-200 text-sm rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:bg-white transition-all shadow-inner" placeholder="Cari nama, NISN, kelas...">
@@ -110,7 +96,6 @@
           <button onclick="resetFilters()" class="text-sm text-brand-teal font-semibold hover:underline">Clear All</button>
         </div>
 
-        <!-- Accordion: Kelas -->
         <div class="mb-6 pb-6 border-b border-gray-200">
           <h4 class="font-bold text-gray-900 mb-4 flex justify-between items-center">
             Jenjang Kelas <i class="fa-solid fa-chevron-up text-xs text-gray-400"></i>
@@ -135,7 +120,15 @@
           </div>
         </div>
 
-        <!-- Accordion: Jurusan -->
+        <div class="mb-6 pb-6 border-b border-gray-200">
+          <h4 class="font-bold text-gray-900 mb-4 flex justify-between items-center">
+            Semester <i class="fa-solid fa-chevron-up text-xs text-gray-400"></i>
+          </h4>
+          <select id="filterSemester" onchange="applyFilters()" class="w-full bg-gray-50 border border-gray-200 text-sm rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-brand-teal text-gray-700 cursor-pointer">
+            <option value="ALL">Semua Semester</option>
+            </select>
+        </div>
+
         <div class="mb-2">
           <h4 class="font-bold text-gray-900 mb-4 flex justify-between items-center">
             Program Keahlian <i class="fa-solid fa-chevron-up text-xs text-gray-400"></i>
@@ -144,9 +137,7 @@
         </div>
       </aside>
 
-      <!-- GALERI UTAMA -->
       <main class="flex-1">
-        <!-- Top Bar Atas Galeri -->
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
           <h2 class="text-xl font-extrabold text-gray-900">
             Semua Karya 
@@ -158,27 +149,21 @@
           </div>
         </div>
 
-        <!-- State Loading -->
         <div id="loading" class="flex flex-col items-center justify-center py-20 w-full">
           <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-brand-teal mb-4"></div>
           <p class="text-gray-500 font-medium animate-pulse">Menghubungkan ke Database...</p>
         </div>
 
-        <!-- Grid Container -->
         <div id="galeriKarya" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <!-- Kartu diinjeksi via JS -->
-        </div>
+          </div>
 
-        <!-- Kontainer Pagination -->
         <div id="pagination" class="hidden flex-wrap justify-center mt-12 gap-2">
-          <!-- Tombol Pagination -->
-        </div>
+          </div>
       </main>
       
     </div>
   </div>
 
-  <!-- 4. MODAL PREVIEW -->
   <div id="previewModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8 transition-opacity">
     <div data-aos="zoom-in" data-aos-duration="300" class="bg-white rounded-2xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden relative shadow-2xl scale-100 transform transition-transform">
       <div class="flex justify-between items-center p-5 border-b border-gray-100 bg-gray-50/80">
@@ -188,14 +173,11 @@
         </button>
       </div>
       <div class="flex-1 bg-gray-100">
-        <!-- Gunakan PDF iframe atau fallback loading -->
         <iframe id="pdfViewer" src="" class="w-full h-full border-none"></iframe>
       </div>
     </div>
   </div>
 
-  <!-- 5. JAVASCRIPT & AOS INIT -->
-  <!-- AOS Animation Script -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     // Inisialisasi AOS Animation
@@ -205,6 +187,7 @@
       duration: 600
     });
 
+    // Pastikan API Google Script Anda benar di sini
     const API_URL = "https://script.google.com/macros/s/AKfycbyFDvO3bsQnmvwfH1QWshx218c1bQhhr_kUdNzmKNv5Pst3ay1ZahWBd73Tit4kpZCl/exec";
 
     const dbJurusan = {
@@ -239,7 +222,7 @@
         .catch(error => {
           document.getElementById('loading').innerHTML = `
             <div class="bg-red-50 text-red-500 p-4 rounded-xl border border-red-200">
-              <i class="fa-solid fa-triangle-exclamation mr-2"></i> Gagal memuat data API.
+              <i class="fa-solid fa-triangle-exclamation mr-2"></i> Gagal memuat data API. Pastikan link Apps Script aktif.
             </div>`;
         });
     });
@@ -285,6 +268,8 @@
     }
 
     function prosesData(data) {
+      let uniqueSemesters = new Set(); // Setup pengumpul jenis semester
+
       allDataProcessed = data.map(item => {
         let strKelas = String(item.kelas).trim().toUpperCase();
         let matchKelas = strKelas.match(/^(XII|XI|X)/); 
@@ -300,13 +285,27 @@
           }
         }
 
+        // --- PENANGANAN SEMESTER ---
+        // Jika header di Spreadsheet adalah 'Semester', API akan memanggilnya sbg item.semester
+        let semesterValue = item.semester ? String(item.semester).trim() : 'Tidak Diketahui';
+        if (semesterValue !== 'Tidak Diketahui') {
+            uniqueSemesters.add(semesterValue);
+        }
+
         return {
           ...item,
           nama: formatNamaProper(item.nama),
           jenjang: jenjangClean,
           kodeJurusan: kodeJurusan,
-          kelasAsli: item.kelas 
+          kelasAsli: item.kelas,
+          semesterData: semesterValue // kita simpan di objek
         };
+      });
+
+      // Populate Dropdown Filter Semester Secara Dinamis
+      const semSelect = document.getElementById('filterSemester');
+      Array.from(uniqueSemesters).sort().forEach(sem => {
+        semSelect.insertAdjacentHTML('beforeend', `<option value="${sem}">Semester ${sem}</option>`);
       });
 
       document.getElementById('loading').classList.add('hidden');
@@ -328,8 +327,10 @@
       selectedJurusans.clear();
       document.getElementById('searchInput').value = '';
       
+      // Reset radio buttons, checkboxes, dan Select Dropdown
       document.querySelector('input[name="kelas"][value="ALL"]').checked = true;
       document.querySelectorAll('#jurusanCheckboxes input[type="checkbox"]').forEach(cb => cb.checked = false);
+      document.getElementById('filterSemester').value = 'ALL'; // Reset semester dropdown
       
       applyFilters();
     }
@@ -337,6 +338,7 @@
     function applyFilters() {
       let filtered = allDataProcessed;
       
+      // 1. Filter Pencarian Text
       const query = document.getElementById('searchInput').value.toLowerCase();
       if (query) {
         filtered = filtered.filter(d => 
@@ -346,10 +348,18 @@
         );
       }
       
+      // 2. Filter Jenjang Kelas
       if (selectedKelas !== 'ALL') {
         filtered = filtered.filter(d => d.jenjang === selectedKelas);
       }
+
+      // 3. Filter Semester
+      const selectedSemester = document.getElementById('filterSemester').value;
+      if (selectedSemester !== 'ALL') {
+        filtered = filtered.filter(d => d.semesterData === selectedSemester);
+      }
       
+      // 4. Filter Jurusan
       if (selectedJurusans.size > 0) {
         filtered = filtered.filter(d => selectedJurusans.has(d.kodeJurusan));
       }
@@ -405,7 +415,6 @@
 
       // Angka Halaman
       for (let i = 1; i <= totalPages; i++) {
-        // Logika penyederhanaan nomor halaman (jika lebih dari 5 halaman)
         if (totalPages > 5) {
           if (i !== 1 && i !== totalPages && Math.abs(i - currentPage) > 1) {
             if (i === 2 || i === totalPages - 1) {
@@ -435,7 +444,7 @@
       container.insertAdjacentHTML('beforeend', btnNext);
     }
 
-    // MENGGAMBAR KARTU HTML (Dilengkapi AOS)
+    // MENGGAMBAR KARTU HTML
     function renderGaleri(dataItems) {
       const container = document.getElementById('galeriKarya');
       container.innerHTML = '';
@@ -449,11 +458,16 @@
 
       dataItems.forEach((item, index) => {
         let info = dbJurusan[item.kodeJurusan] || dbJurusan['LAIN'];
-        // Sedikit delay stagger untuk AOS agar lebih estetik
         let delay = (index % itemsPerPage) * 50; 
         
+        // Teks penanda Smt (Semester)
+        let labelSemester = item.semesterData !== 'Tidak Diketahui' ? ` • Smt ${item.semesterData}` : '';
+
+        // Pastikan tidak ada tanda kutip rusak saat memanggil function JS dari HTML event
+        const namaAman = item.nama.replace(/'/g, "\\'");
+
         const cardHtml = `
-          <div data-aos="fade-up" data-aos-delay="${delay}" class="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:border-gray-200 transition-all duration-300 group flex flex-col h-full relative cursor-pointer" onclick="bukaPoster('${item.pdfUrl}', '${item.nama.replace(/'/g, "\\'")}', '${item.kelasAsli}', '${info.nama}')">
+          <div data-aos="fade-up" data-aos-delay="${delay}" class="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:border-gray-200 transition-all duration-300 group flex flex-col h-full relative cursor-pointer" onclick="bukaPoster('${item.pdfUrl}', '${namaAman}', '${item.kelasAsli}', '${info.nama}', '${item.semesterData}')">
             
             <div class="relative h-60 w-full flex flex-col items-center justify-center overflow-hidden" style="background-color: ${info.color}15;">
               <div class="absolute inset-0 opacity-40 bg-gradient-to-br from-white/50 to-transparent"></div>
@@ -473,12 +487,9 @@
 
               <div class="flex justify-between items-start mb-1 gap-2">
                 <h3 class="font-bold text-gray-900 text-base leading-tight truncate flex-1" title="${item.nama}">${item.nama}</h3>
-                <div class="flex items-center gap-1 bg-yellow-50 text-yellow-600 px-1.5 py-0.5 rounded text-[11px] font-bold">
-                  5.0 <i class="fa-solid fa-star text-[10px]"></i>
-                </div>
               </div>
               
-              <p class="text-sm text-gray-500 mb-4 truncate">${info.nama} • ${item.kelasAsli}</p>
+              <p class="text-sm text-gray-500 mb-4 truncate">${info.nama} • ${item.kelasAsli}${labelSemester}</p>
               
               <div class="mt-auto"></div>
               
@@ -493,13 +504,15 @@
     }
 
     // MODAL HANDLER
-    function bukaPoster(url, nama, kelas, jurusanLengkap) {
+    function bukaPoster(url, nama, kelas, jurusanLengkap, semesterInfo) {
+      let labelSem = semesterInfo !== 'Tidak Diketahui' ? ` (Smt ${semesterInfo})` : '';
+
       document.getElementById('modalTitle').innerHTML = `
         <div class="flex items-center">
           <i class="fa-solid fa-file-pdf text-red-500 mr-3 text-2xl"></i>
           <div>
             <div class="text-gray-900 leading-tight">${nama}</div>
-            <div class="text-gray-500 font-normal text-xs mt-0.5">${kelas} — ${jurusanLengkap}</div>
+            <div class="text-gray-500 font-normal text-xs mt-0.5">${kelas} — ${jurusanLengkap}${labelSem}</div>
           </div>
         </div>
       `;
