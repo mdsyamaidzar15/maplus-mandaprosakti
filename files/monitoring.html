@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monitoring Sidang PRODISTIK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <div>
+        <h1>Monitoring Sidang PRODISTIK</h1>
+        <p>MAN 2 Kota Probolinggo</p>
+      </div>
+      <a href="index.html">Halaman penguji</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="toolbar">
+      <div><label for="fTgl">Tanggal</label><input id="fTgl" type="date"></div>
+      <div>
+        <label for="fJenis">Jenis sidang</label>
+        <select id="fJenis">
+          <option value="SEMUA">Semua</option>
+          <option value="PROPOSAL">Seminar Proposal</option>
+          <option value="SIDANG_AKHIR">Sidang Akhir</option>
+        </select>
+      </div>
+      <div>
+        <label for="fStatus">Status</label>
+        <select id="fStatus">
+          <option value="SEMUA">Semua</option>
+          <option>BELUM DIMULAI</option>
+          <option>PROSES PENILAIAN</option>
+          <option>SELESAI</option>
+          <option>BELUM ADA PENGUJI</option>
+        </select>
+      </div>
+      <div><label for="fCari">Cari nama siswa</label><input id="fCari" type="search" placeholder="Ketik nama…"></div>
+      <button id="btnRefresh" class="btn" type="button">Muat ulang</button>
+    </div>
+
+    <div class="stats" id="stats" aria-live="polite"></div>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>No</th><th>Nama siswa</th><th>Kelas asal</th><th>Kelas PRODISTIK</th><th>Jenis sidang</th><th>Sesi</th><th>Progres</th><th>Status</th></tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="muted" id="updated" style="margin-top:.75rem"></p>
+  </main>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/monitoring.js"></script>
+</body>
+</html>

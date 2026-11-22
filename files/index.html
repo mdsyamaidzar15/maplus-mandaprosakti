@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Penilaian Sidang PRODISTIK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <div>
+        <h1>Penilaian Sidang PRODISTIK</h1>
+        <p>MAN 2 Kota Probolinggo</p>
+      </div>
+      <a href="monitoring.html">Lihat progres sidang</a>
+    </div>
+  </header>
+
+  <main class="wrap narrow">
+    <!-- 1. Pilih penguji -->
+    <section id="v-pick" class="card">
+      <h2>Pilih nama Anda</h2>
+      <div class="field">
+        <label for="selPenguji">Nama penguji</label>
+        <select id="selPenguji"><option value="">Memuat daftar penguji…</option></select>
+      </div>
+      <button id="btnMasuk" class="btn" type="button" disabled>Lihat peserta saya</button>
+    </section>
+
+    <!-- 2. Daftar peserta -->
+    <section id="v-list" hidden>
+      <div class="bar">
+        <div><h2 id="namaPenguji" style="margin:0"></h2><span class="muted">Peserta yang Anda nilai</span></div>
+        <button id="btnGanti" class="btn ghost small" type="button">Ganti penguji</button>
+      </div>
+      <div class="card">
+        <label for="inTanggal">Tanggal sidang</label>
+        <input id="inTanggal" type="date">
+      </div>
+      <div id="listBox" class="list" aria-live="polite"></div>
+    </section>
+
+    <!-- 3. Form penilaian -->
+    <section id="v-form" hidden>
+      <button id="btnKembali" class="btn ghost small" type="button" style="margin-bottom:1rem">← Kembali ke daftar</button>
+      <form id="formNilai" novalidate>
+        <div class="card">
+          <h2 id="fNama"></h2>
+          <p id="fMeta" class="muted"></p>
+          <div class="field">
+            <label for="inJudul">Judul tugas akhir</label>
+            <textarea id="inJudul" maxlength="300"></textarea>
+          </div>
+        </div>
+        <div class="card" id="indBox"></div>
+        <div class="scorebar">
+          <div class="score" aria-live="polite"><small>Nilai akhir (perkiraan)</small><span id="preview">–</span></div>
+          <button id="btnSimpan" class="btn" type="submit">Simpan penilaian</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/examiner.js"></script>
+</body>
+</html>
