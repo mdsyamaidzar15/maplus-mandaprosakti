@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Admin — Sidang PRODISTIK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <div>
+        <h1>Admin Sidang PRODISTIK</h1>
+        <p>MAN 2 Kota Probolinggo</p>
+      </div>
+      <button id="btnKeluar" class="btn ghost small" type="button" hidden>Keluar</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Login token -->
+    <section id="v-login" class="card narrow" style="max-width:420px">
+      <h2>Masuk admin</h2>
+      <form id="formLogin">
+        <div class="field">
+          <label for="inToken">Token admin</label>
+          <input id="inToken" type="password" autocomplete="off" required>
+          <p class="hint">Token diperiksa di server dan hanya disimpan selama tab ini terbuka.</p>
+        </div>
+        <button class="btn" type="submit" id="btnLogin">Masuk</button>
+      </form>
+    </section>
+
+    <!-- Aplikasi admin -->
+    <section id="v-app" hidden>
+      <div class="tabs" id="tabs" role="tablist" aria-label="Menu admin"></div>
+      <div id="panel" role="tabpanel"></div>
+    </section>
+  </main>
+
+  <dialog id="dlg">
+    <form id="formEdit" method="dialog" novalidate>
+      <h2 id="dlgTitle"></h2>
+      <div id="dlgFields"></div>
+      <div id="dlgErr" class="err" role="alert"></div>
+      <div class="actions">
+        <button type="button" class="btn ghost" id="dlgBatal">Batal</button>
+        <button type="submit" class="btn" id="dlgSimpan">Simpan perubahan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>
