@@ -7,49 +7,56 @@
   <title>Admin — Sidang PRODISTIK</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/seminar/assets/css/style.css">
 </head>
 <body>
+  <a class="skip" href="#main">Lewati ke konten utama</a>
   <header class="top">
-    <div class="wrap">
-      <div>
-        <h1>Admin Sidang PRODISTIK</h1>
-        <p>MAN 2 Kota Probolinggo</p>
-      </div>
-      <button id="btnKeluar" class="btn ghost small" type="button" hidden>Keluar</button>
+    <div class="top-in">
+      <div><p class="app">Admin Sidang PRODISTIK</p><p class="org">MAN 2 Kota Probolinggo</p></div>
+      <button id="btnKeluar" class="btn secondary" type="button" hidden>Keluar</button>
     </div>
   </header>
 
-  <main class="wrap">
-    <!-- Login token -->
-    <section id="v-login" class="card narrow" style="max-width:420px">
-      <h2>Masuk admin</h2>
-      <form id="formLogin">
+  <main id="main" class="page">
+    <!-- Pola Form (auth) -->
+    <section id="v-login" class="panel" style="max-width:420px;margin:32px auto 0">
+      <h1>Masuk admin</h1>
+      <form id="formLogin" novalidate style="margin-top:24px">
         <div class="field">
-          <label for="inToken">Token admin</label>
-          <input id="inToken" type="password" autocomplete="off" required>
-          <p class="hint">Token diperiksa di server dan hanya disimpan selama tab ini terbuka.</p>
+          <label for="inToken">Token admin <span class="req" aria-hidden="true">*</span></label>
+          <input id="inToken" type="password" autocomplete="off" aria-required="true" aria-describedby="hToken errToken">
+          <p id="hToken" class="hint">Token diperiksa di server dan hanya disimpan selama tab ini terbuka.</p>
+          <div id="errToken" class="err" role="alert"></div>
         </div>
-        <button class="btn" type="submit" id="btnLogin">Masuk</button>
+        <button class="btn" type="submit" id="btnLogin" style="width:100%">Masuk</button>
       </form>
+      <p style="margin-top:16px;text-align:center"><a class="lnk" href="/seminar/index.html">Kembali ke halaman penguji</a></p>
     </section>
 
-    <!-- Aplikasi admin -->
+    <!-- Pola List / Index per tab; Ringkasan = Dashboard (hanya baca) -->
     <section id="v-app" hidden>
-      <div class="tabs" id="tabs" role="tablist" aria-label="Menu admin"></div>
-      <div id="panel" role="tabpanel"></div>
+      <nav class="tabs" id="tabs" aria-label="Menu admin"></nav>
+      <div id="panel"></div>
     </section>
   </main>
 
-  <dialog id="dlg">
+  <!-- Panel samping (slide-over) untuk tambah/ubah -->
+  <dialog id="dlg" aria-labelledby="dlgTitle">
     <form id="formEdit" method="dialog" novalidate>
-      <h2 id="dlgTitle"></h2>
-      <div id="dlgFields"></div>
-      <div id="dlgErr" class="err" role="alert"></div>
-      <div class="actions">
-        <button type="button" class="btn ghost" id="dlgBatal">Batal</button>
-        <button type="submit" class="btn" id="dlgSimpan">Simpan perubahan</button>
+      <div class="dlg-body">
+        <h2 id="dlgTitle"></h2>
+        <p class="muted" style="margin:4px 0 24px">* wajib diisi</p>
+        <div id="dlgFields"></div>
+        <div id="dlgWarn" class="notice warn" role="alert" hidden></div>
+        <div id="dlgErr" class="err" role="alert"></div>
+      </div>
+      <div class="dlg-foot">
+        <div class="actions">
+          <button type="button" class="btn secondary" id="dlgBatal">Batalkan</button>
+          <button type="submit" class="btn" id="dlgSimpan">Simpan perubahan</button>
+        </div>
       </div>
     </form>
   </dialog>
