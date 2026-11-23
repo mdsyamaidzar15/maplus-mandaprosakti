@@ -14,13 +14,32 @@
   <header class="top">
     <div class="top-in">
       <div><p class="app">Penilaian Sidang PRODISTIK</p><p class="org">MAN 2 Kota Probolinggo</p></div>
-      <a class="lnk" href="/seminar/monitoring.html">Lihat progres sidang</a>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <a class="lnk" href="/seminar/monitoring.html">Lihat progres sidang</a>
+        <button id="btnKeluar" class="btn secondary" type="button" hidden>Keluar</button>
+      </div>
     </div>
   </header>
 
   <main id="main" class="page">
+    <!-- Pola Form (auth): token (sama dengan admin) -->
+    <section id="v-token" class="panel" hidden style="max-width:420px;margin:32px auto 0">
+      <h1>Masuk penguji</h1>
+      <p class="muted" style="margin:4px 0 24px">Masukkan token yang diberikan panitia sidang.</p>
+      <form id="formToken" novalidate>
+        <div class="field">
+          <label for="inToken">Token <span class="req" aria-hidden="true">*</span></label>
+          <input id="inToken" type="password" autocomplete="off" aria-required="true" aria-describedby="hToken errToken">
+          <p id="hToken" class="hint">Token diperiksa di server dan hanya disimpan selama tab ini terbuka.</p>
+          <div id="errToken" class="err" role="alert"></div>
+        </div>
+        <button id="btnToken" class="btn" type="submit" style="width:100%">Masuk</button>
+      </form>
+      <p style="margin-top:16px;text-align:center"><a class="lnk" href="/seminar/monitoring.html">Lihat progres sidang tanpa token</a></p>
+    </section>
+
     <!-- Pola Form (auth): pilih nama penguji -->
-    <section id="v-pick" class="panel" style="max-width:420px;margin:32px auto 0">
+    <section id="v-pick" class="panel" hidden style="max-width:420px;margin:32px auto 0">
       <h1>Pilih nama penguji</h1>
       <p class="muted" style="margin:4px 0 24px">Nama Anda menentukan peserta yang tampil untuk dinilai.</p>
       <div class="field">
