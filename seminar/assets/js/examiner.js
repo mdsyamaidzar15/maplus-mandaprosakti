@@ -2,12 +2,28 @@
 (() => {
   const { api, esc, todayJakarta, fmtTgl, JENIS, icon, chip, safeUrl, skeleton, emptyState, paginate, pagerHtml, toast } = App;
   const $ = s => document.querySelector(s);
-  const S = { penguji: null, peserta: [], q: '', page: 1, cur: null, ind: [], dirty: false, saving: false, ready: false };
-  const show = id => ['v-pick', 'v-list', 'v-form'].forEach(v => ($('#' + v).hidden = v !== id));
+  const S = { token: sessionStorage.getItem('adm_token') || '', penguji: null, peserta: [], q: '', page: 1, cur: null, ind: [], dirty: false, saving: false, ready: false };
+  const show = id => ['v-token', 'v-pick', 'v-list', 'v-form'].forEach(v => ($('#' + v).hidden = v !== id));
   const round2 = n => Math.round((n + Number.EPSILON) * 100) / 100;
+
+  // Semua aksi penguji memakai token yang sama dengan admin.
+  const call = async (action, params = {}) => {
+    try { return await api(action, { token: S.token, ...params }); }
+    catch (e) { if (e.message === 'Token tidak valid.') logout(true); throw e; }
+  };
+
+  function logout(expired) {
+    S.token = ''; S.penguji = null; S.ready = false; S.peserta = [];
+    sessionStorage.removeItem('adm_token');
+    sessionStorage.removeItem('penguji');
+    if (expired) toast('Token tidak berlaku. Masukkan token lagi.', 'err');
+    if (location.hash) location.hash = ''; else route();
+  }
 
   /* ---------- Rute ---------- */
   function route() {
+    $('#btnKeluar').hidden = !S.token;
+    if (!S.token) return show('v-token');
     if (!S.penguji) return show('v-pick');
     const m = /^#nilai-(.+)$/.exec(location.hash);
     if (m) return openForm(decodeURIComponent(m[1]));
@@ -19,7 +35,7 @@
   async function initPenguji() {
     const sel = $('#selPenguji');
     try {
-      const list = await api('getPengujiAktif');
+      const list = await call('getPengujiAktif');
       sel.innerHTML = '<option value="">Pilih nama</option>' +
         list.map(p => `<option value="${esc(p.idpenguji)}">${esc(p.namapenguji)}</option>`).join('');
       S.ready = true;
@@ -50,7 +66,7 @@
   }
 
   /* ---------- Daftar peserta ---------- */
-  const fetchPeserta = () => api('getPesertaPenguji', { idPenguji: S.penguji.id, tanggal: $('#inTanggal').value });
+  const fetchPeserta = () => call('getPesertaPenguji', { idPenguji: S.penguji.id, tanggal: $('#inTanggal').value });
 
   async function loadList() {
     const f = $('#listFrame');
@@ -71,7 +87,7 @@
   };
 
   function rowHtml(p) {
-    const meta = [JENIS[p.jenissidang] || p.jenissidang, 'Kelas ' + (p.kelasprodistik || p.kelasasal || '-'), p.sesi ? 'Sesi ' + p.sesi : ''].filter(Boolean).join(' · ');
+    const meta = [JENIS[p.jenissidang] || p.jenissidang, 'Kelas ' + (p.kelasprodistik || p.kelasasal || '-'), p.sesi ? 'Ruang ' + p.sesi : ''].filter(Boolean).join(' · ');
     return `<tr>
       <td><b>${esc(p.namasiswa)}</b><div class="meta">${esc(meta)}</div></td>
       <td>${docLink(p.linkppt, 'PPT', 'presentation')}${docLink(p.linkdraft, 'Draft laporan', 'file-text')}</td>
@@ -116,8 +132,8 @@
       $('#fMeta').textContent = `${JENIS[p.jenissidang] || p.jenissidang} · ${fmtTgl(p.tanggal)} · Kelas ${p.kelasprodistik || p.kelasasal || '-'}`;
       $('#docs').innerHTML = docLink(p.linkppt, 'PPT', 'presentation') + docLink(p.linkdraft, 'Draft laporan', 'file-text');
       const [ind, nilai] = await Promise.all([
-        api('getIndikator', { jenisSidang: p.jenissidang }),
-        api('getPenilaian', { idPenugasan: p.idpenugasan, idPenguji: S.penguji.id }).catch(() => null)
+        call('getIndikator', { jenisSidang: p.jenissidang }),
+        call('getPenilaian', { idPenugasan: p.idpenugasan, idPenguji: S.penguji.id }).catch(() => null)
       ]);
       S.ind = ind.slice().sort((a, b) => (+a.no || 0) - (+b.no || 0));
       renderIndikator(nilai);
@@ -173,7 +189,7 @@
     btn.textContent = 'Menyimpan…';
     try {
       // Nilai akhir yang sah dihitung backend.
-      const res = await api('savePenilaian', {
+      const res = await call('savePenilaian', {
         idPenugasan: S.cur.idpenugasan, idSidang: S.cur.idsidang, idPenguji: S.penguji.id,
         judulTA: $('#inJudul').value.trim(), nilai: readValues().map(Number)
       });
@@ -234,5 +250,38 @@
   window.addEventListener('hashchange', route);
   window.addEventListener('beforeunload', e => { if (S.dirty) { e.preventDefault(); e.returnValue = ''; } });
 
-  initPenguji();
+  /* ---------- Token ---------- */
+  $('#formToken').addEventListener('submit', async e => {
+    e.preventDefault();
+    const inp = $('#inToken'), err = $('#errToken'), btn = $('#btnToken'), t = inp.value.trim();
+    if (!t) { err.textContent = 'Isi token.'; inp.setAttribute('aria-invalid', 'true'); inp.focus(); return; }
+    btn.setAttribute('aria-busy', 'true');
+    btn.textContent = 'Memeriksa…';
+    try {
+      await api('adminLogin', { token: t });
+      S.token = t;
+      sessionStorage.setItem('adm_token', t);
+      inp.value = '';
+      show('v-pick');
+      initPenguji();
+    } catch (ex) {
+      err.textContent = ex.message;
+      inp.setAttribute('aria-invalid', 'true');
+    } finally {
+      btn.removeAttribute('aria-busy');
+      btn.textContent = 'Masuk';
+    }
+  });
+  $('#inToken').addEventListener('input', e => { $('#errToken').textContent = ''; e.target.removeAttribute('aria-invalid'); });
+  $('#btnKeluar').addEventListener('click', () => logout(false));
+
+  (async () => {
+    if (S.token) {
+      try { await api('adminLogin', { token: S.token }); }
+      catch { S.token = ''; sessionStorage.removeItem('adm_token'); }
+    }
+    if (!S.token) return route();
+    show('v-pick');
+    initPenguji();
+  })();
 })();
