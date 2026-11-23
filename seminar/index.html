@@ -6,60 +6,72 @@
   <title>Penilaian Sidang PRODISTIK</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/seminar/assets/css/style.css">
 </head>
 <body>
+  <a class="skip" href="#main">Lewati ke konten utama</a>
   <header class="top">
-    <div class="wrap">
-      <div>
-        <h1>Penilaian Sidang PRODISTIK</h1>
-        <p>MAN 2 Kota Probolinggo</p>
-      </div>
-      <a href="/seminar/monitoring.html">Lihat progres sidang</a>
+    <div class="top-in">
+      <div><p class="app">Penilaian Sidang PRODISTIK</p><p class="org">MAN 2 Kota Probolinggo</p></div>
+      <a class="lnk" href="/seminar/monitoring.html">Lihat progres sidang</a>
     </div>
   </header>
 
-  <main class="wrap narrow">
-    <!-- 1. Pilih penguji -->
-    <section id="v-pick" class="card">
-      <h2>Pilih nama Anda</h2>
+  <main id="main" class="page">
+    <!-- Pola Form (auth): pilih nama penguji -->
+    <section id="v-pick" class="panel" style="max-width:420px;margin:32px auto 0">
+      <h1>Pilih nama penguji</h1>
+      <p class="muted" style="margin:4px 0 24px">Nama Anda menentukan peserta yang tampil untuk dinilai.</p>
       <div class="field">
-        <label for="selPenguji">Nama penguji</label>
-        <select id="selPenguji"><option value="">Memuat daftar penguji…</option></select>
+        <label for="selPenguji">Nama penguji <span class="req" aria-hidden="true">*</span></label>
+        <select id="selPenguji" aria-describedby="errPenguji" aria-required="true"><option value="">Memuat daftar penguji…</option></select>
+        <div id="errPenguji" class="err" role="alert"></div>
       </div>
-      <button id="btnMasuk" class="btn" type="button" disabled>Lihat peserta saya</button>
+      <button id="btnMasuk" class="btn" type="button" style="width:100%">Lihat peserta saya</button>
     </section>
 
-    <!-- 2. Daftar peserta -->
+    <!-- Pola List / Index: daftar peserta -->
     <section id="v-list" hidden>
-      <div class="bar">
-        <div><h2 id="namaPenguji" style="margin:0"></h2><span class="muted">Peserta yang Anda nilai</span></div>
-        <button id="btnGanti" class="btn ghost small" type="button">Ganti penguji</button>
+      <div class="head">
+        <div><h1 id="namaPenguji"></h1><p class="muted">Peserta yang Anda nilai pada tanggal terpilih.</p></div>
+        <button id="btnGanti" class="btn secondary" type="button">Ganti penguji</button>
       </div>
-      <div class="card">
-        <label for="inTanggal">Tanggal sidang</label>
-        <input id="inTanggal" type="date">
+      <div class="toolbar">
+        <div class="field"><label for="cari">Cari nama siswa</label><input id="cari" type="search" autocomplete="off"></div>
+        <div class="field fit"><label for="inTanggal">Tanggal sidang</label><input id="inTanggal" type="date"></div>
       </div>
-      <div id="listBox" class="list" aria-live="polite"></div>
+      <div class="frame" id="listFrame" aria-live="polite"></div>
     </section>
 
-    <!-- 3. Form penilaian -->
-    <section id="v-form" hidden>
-      <button id="btnKembali" class="btn ghost small" type="button" style="margin-bottom:1rem">← Kembali ke daftar</button>
+    <!-- Pola Form pada rute #nilai-… : mengisi nilai -->
+    <section id="v-form" class="narrow" hidden style="max-width:640px;margin:0 auto">
+      <button id="btnKembali" class="lnk" type="button" style="margin-left:-8px"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Kembali ke daftar</button>
       <form id="formNilai" novalidate>
-        <div class="card">
-          <h2 id="fNama"></h2>
-          <p id="fMeta" class="muted"></p>
-          <div class="field">
-            <label for="inJudul">Judul tugas akhir</label>
-            <textarea id="inJudul" maxlength="300"></textarea>
+        <h1 id="fNama" style="margin-top:8px"></h1>
+        <p id="fMeta" class="muted"></p>
+        <div id="docs" class="docs"></div>
+        <div id="discard" class="notice warn" role="alert" hidden>
+          Perubahan nilai belum disimpan.
+          <div class="row">
+            <button id="btnBuang" class="btn danger" type="button">Buang perubahan</button>
+            <button id="btnLanjut" class="btn secondary" type="button">Lanjut mengisi</button>
           </div>
         </div>
-        <div class="card" id="indBox"></div>
-        <div class="scorebar">
+        <div class="field">
+          <label for="inJudul">Judul tugas akhir <span class="muted">(opsional)</span></label>
+          <textarea id="inJudul" maxlength="300"></textarea>
+        </div>
+        <fieldset>
+          <legend>Nilai indikator <span class="muted">(* wajib diisi)</span></legend>
+          <div id="indBox"></div>
+        </fieldset>
+        <div class="actionbar">
           <div class="score" aria-live="polite"><small>Nilai akhir (perkiraan)</small><span id="preview">–</span></div>
-          <button id="btnSimpan" class="btn" type="submit">Simpan penilaian</button>
+          <div class="actions">
+            <button id="btnBatal" class="btn secondary" type="button">Batalkan</button>
+            <button id="btnSimpan" class="btn" type="submit">Simpan penilaian</button>
+          </div>
         </div>
       </form>
     </section>
