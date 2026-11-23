@@ -32,7 +32,7 @@
     const g = paginate(rows, page);
     const off = (g.page - 1) * 25;
     f.innerHTML = `<div class="scroll"><table>
-      <thead><tr><th>No</th><th>Nama siswa</th><th>Kelas asal</th><th>Kelas PRODISTIK</th><th>Jenis sidang</th><th>Sesi</th><th>Progres</th><th>Status</th></tr></thead>
+      <thead><tr><th>No</th><th>Nama siswa</th><th>Kelas asal</th><th>Kelas PRODISTIK</th><th>Jenis sidang</th><th>Ruang</th><th>Progres</th><th>Status</th></tr></thead>
       <tbody>${g.items.map((r, i) => `<tr>
         <td class="num">${off + i + 1}</td><td><b>${esc(r.namasiswa)}</b></td><td>${esc(r.kelasasal)}</td><td>${esc(r.kelasprodistik)}</td>
         <td>${esc(JENIS[r.jenissidang] || r.jenissidang)}</td><td>${esc(r.sesi)}</td>
