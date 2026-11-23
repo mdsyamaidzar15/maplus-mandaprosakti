@@ -35,7 +35,7 @@
         { k: 'KELAS_ASAL', label: 'Kelas asal' },
         { k: 'KELAS_PRODISTIK', label: 'Kelas PRODISTIK' },
         { k: 'PEMBIMBING', label: 'Pembimbing' },
-        { k: 'SESI', label: 'Sesi' },
+        { k: 'SESI', label: 'Ruang', ph: 'Lab 1' },
         { k: 'STATUS', label: 'Status', type: 'select', opts: STATUS },
         { k: 'LINK_PPT', label: 'Link PPT (Google Drive)', type: 'url', link: true, ph: 'https://drive.google.com/…', hint: LINK_HINT },
         { k: 'LINK_DRAFT_LAPORAN', label: 'Link draft laporan TA (Google Drive)', type: 'url', link: true, ph: 'https://drive.google.com/…', hint: LINK_HINT },
@@ -90,7 +90,7 @@
     return cache[tabel];
   };
   const isReq = f => f.req || f.id || f.type === 'ref' || f.type === 'select';
-  const WORDS = { id: 'ID', nis: 'NIS', ppt: 'PPT', ta: 'TA' };
+  const WORDS = { id: 'ID', nis: 'NIS', ppt: 'PPT', ta: 'TA', sesi: 'Ruang' };
   const headLabel = c => c.toLowerCase().split('_').map((w, i) => WORDS[w] || (i ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(' ');
 
   /* ---------- Masuk / keluar ---------- */
