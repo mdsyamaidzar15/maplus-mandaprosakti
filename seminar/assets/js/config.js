@@ -4,4 +4,5 @@
 window.APP_CONFIG = {
   API_URL: 'https://script.google.com/macros/s/AKfycbyLUylGw0XrS9vfF7VSMXjKPGfGJZmbgDlkWEQg61s-VWb59NZGy47VcjpiVm9whgXdrg/exec', // https://script.google.com/macros/s/XXXX/exec
   TIMEZONE: 'Asia/Jakarta'
+  UPLOAD_MAKS_MB: 15 // samakan dengan UPLOAD_MAKS_MB di sheet PENGATURAN
 };
