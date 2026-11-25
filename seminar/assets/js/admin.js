@@ -20,6 +20,7 @@
       fields: [
         { k: 'ID_PENGUJI', label: 'ID penguji', id: true, ph: 'PG003' },
         { k: 'NAMA_PENGUJI', label: 'Nama penguji', req: true },
+        { k: 'RUANG', label: 'Ruang', ph: 'Lab 1', hint: 'Ruang tempat penguji bertugas. Peserta otomatis mengikuti ruang penguji.' },
         { k: 'STATUS', label: 'Status', type: 'select', opts: STATUS },
         { k: 'KETERANGAN', label: 'Keterangan', type: 'textarea' }
       ]
@@ -31,11 +32,12 @@
         { k: 'TANGGAL', label: 'Tanggal', type: 'date', req: true },
         { k: 'JENIS_SIDANG', label: 'Jenis sidang', type: 'select', opts: JENIS_OPT },
         { k: 'NIS', label: 'NIS', req: true },
+        { k: 'NISN', label: 'NISN', ph: '0012345678', hint: 'Dipakai untuk nama file unggahan dan verifikasi siswa. Jika kosong, NIS dipakai.' },
         { k: 'NAMA_SISWA', label: 'Nama siswa', req: true },
         { k: 'KELAS_ASAL', label: 'Kelas asal' },
         { k: 'KELAS_PRODISTIK', label: 'Kelas PRODISTIK' },
         { k: 'PEMBIMBING', label: 'Pembimbing' },
-        { k: 'SESI', label: 'Ruang', ph: 'Lab 1' },
+        { k: 'SESI', label: 'Ruang (pengecualian)', ph: 'Lab 1', hint: 'Kosongkan agar ruang mengikuti penguji.' },
         { k: 'STATUS', label: 'Status', type: 'select', opts: STATUS },
         { k: 'LINK_PPT', label: 'Link PPT (Google Drive)', type: 'url', link: true, ph: 'https://drive.google.com/…', hint: LINK_HINT },
         { k: 'LINK_DRAFT_LAPORAN', label: 'Link draft laporan TA (Google Drive)', type: 'url', link: true, ph: 'https://drive.google.com/…', hint: LINK_HINT },
@@ -74,6 +76,10 @@
       cols: ['ID_NILAI', 'ID_PENUGASAN', 'ID_SIDANG', 'ID_PENGUJI', 'JENIS_SIDANG', 'NIS', 'NAMA_SISWA', 'JUDUL_TA',
         'NILAI_1', 'NILAI_2', 'NILAI_3', 'NILAI_4', 'NILAI_AKHIR', 'WAKTU_INPUT', 'WAKTU_UPDATE', 'STATUS']
     },
+    berkas: {
+      label: 'Berkas', desc: 'Berkas PPT dan laporan yang diunggah siswa. Hanya dapat dilihat.', readOnly: true, tabel: 'UPLOAD_BERKAS',
+      cols: ['WAKTU', 'NIS', 'NAMA_SISWA', 'KELAS_ASAL', 'JENIS_SIDANG', 'JENIS_BERKAS', 'NAMA_FILE', 'UKURAN_KB', 'LINK_FILE', 'STATUS']
+    },
     pengaturan: {
       label: 'Pengaturan', desc: 'Pengaturan aplikasi. Ubah langsung di sheet PENGATURAN.', readOnly: true, tabel: 'PENGATURAN',
       cols: ['KEY', 'VALUE', 'KETERANGAN']
@@ -90,7 +96,7 @@
     return cache[tabel];
   };
   const isReq = f => f.req || f.id || f.type === 'ref' || f.type === 'select';
-  const WORDS = { id: 'ID', nis: 'NIS', ppt: 'PPT', ta: 'TA', sesi: 'Ruang' };
+  const WORDS = { id: 'ID', nis: 'NIS', nisn: 'NISN', ppt: 'PPT', ta: 'TA', kb: 'KB', sesi: 'Ruang (pengecualian)' };
   const headLabel = c => c.toLowerCase().split('_').map((w, i) => WORDS[w] || (i ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(' ');
 
   /* ---------- Masuk / keluar ---------- */
@@ -157,6 +163,7 @@
       const data = t.load ? await t.load() : await getTable(t.tabel, true);
       if (my !== tab) return;
       rows = data.slice();
+      if (tab === 'berkas') rows.reverse(); // terbaru di atas
       if (!t.readOnly) rows.sort((a, b) => String(a[key(t.fields[0].k)]).localeCompare(String(b[key(t.fields[0].k)]), 'id', { numeric: true }));
       draw();
       if (tab === 'indikator') bobotNotice();
@@ -171,7 +178,7 @@
     try {
       const s = await api('getRingkasanMonitoring', { tanggal: todayJakarta(), jenisSidang: 'SEMUA', status: 'SEMUA', keyword: '' });
       if (tab !== 'ringkasan') return;
-      const items = [['Total peserta hari ini', s.total], ['Belum dimulai', s.belumdimulai], ['Proses penilaian', s.proses ?? s.prosespenilaian], ['Selesai', s.selesai], ['Belum ada penguji', s.belumadapenguji]];
+      const items = [['Total peserta hari ini', s.total], ['Belum dimulai', s.belumdimulai], ['Proses penilaian', s.proses ?? s.prosespenilaian], ['Belum upload berkas', s.belumuploadberkas], ['Selesai', s.selesai]];
       panel.innerHTML = headHtml(t) + `<p class="muted">Tanggal ${esc(fmtTgl(todayJakarta()))}.</p><div class="stats">` +
         items.map(([l, v]) => `<div class="stat"><b>${esc(v ?? 0)}</b><span>${l}</span></div>`).join('') + '</div>' +
         (+s.belumadapenguji > 0 ? '<div class="notice bad">Ada peserta tanpa penguji aktif. <div class="row"><button class="btn secondary" type="button" data-goto="penugasan">Atur penugasan</button></div></div>' : '');
