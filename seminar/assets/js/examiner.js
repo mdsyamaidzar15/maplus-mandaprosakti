@@ -37,7 +37,7 @@
     try {
       const list = await call('getPengujiAktif');
       sel.innerHTML = '<option value="">Pilih nama</option>' +
-        list.map(p => `<option value="${esc(p.idpenguji)}">${esc(p.namapenguji)}</option>`).join('');
+        list.map(p => `<option value="${esc(p.idpenguji)}" data-ruang="${esc(p.ruang || '')}">${esc(p.namapenguji)}</option>`).join('');
       S.ready = true;
       const saved = sessionStorage.getItem('penguji');
       if (saved && list.some(p => p.idpenguji === saved)) { sel.value = saved; masuk(); }
@@ -58,7 +58,8 @@
     }
     err.textContent = '';
     sel.removeAttribute('aria-invalid');
-    S.penguji = { id: sel.value, nama: sel.options[sel.selectedIndex].text };
+    S.penguji = { id: sel.value, nama: sel.options[sel.selectedIndex].text, ruang: sel.options[sel.selectedIndex].dataset.ruang || '' };
+    $('#subPenguji').textContent = (S.penguji.ruang ? `Ruang ${S.penguji.ruang} · ` : '') + 'Peserta yang Anda nilai pada tanggal terpilih.';
     sessionStorage.setItem('penguji', S.penguji.id);
     $('#namaPenguji').textContent = S.penguji.nama;
     if (!$('#inTanggal').value) $('#inTanggal').value = todayJakarta();
@@ -87,7 +88,7 @@
   };
 
   function rowHtml(p) {
-    const meta = [JENIS[p.jenissidang] || p.jenissidang, 'Kelas ' + (p.kelasprodistik || p.kelasasal || '-'), p.sesi ? 'Ruang ' + p.sesi : ''].filter(Boolean).join(' · ');
+    const meta = [JENIS[p.jenissidang] || p.jenissidang, 'Kelas ' + (p.kelasprodistik || p.kelasasal || '-'), p.ruang && p.ruang !== S.penguji.ruang ? 'Ruang ' + p.ruang : ''].filter(Boolean).join(' · ');
     return `<tr>
       <td><b>${esc(p.namasiswa)}</b><div class="meta">${esc(meta)}</div></td>
       <td>${docLink(p.linkppt, 'PPT', 'presentation')}${docLink(p.linkdraft, 'Draft laporan', 'file-text')}</td>
