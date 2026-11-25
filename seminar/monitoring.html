@@ -45,11 +45,16 @@
         </select>
       </div>
       <div class="field">
+        <label for="fKelas">Kelas asal</label>
+        <select id="fKelas"><option value="SEMUA">Semua kelas</option></select>
+      </div>
+      <div class="field">
         <label for="fStatus">Status</label>
         <select id="fStatus">
           <option value="SEMUA">Semua</option>
           <option value="BELUM DIMULAI">Belum dimulai</option>
           <option value="PROSES PENILAIAN">Proses penilaian</option>
+          <option value="BELUM UPLOAD BERKAS">Belum upload berkas</option>
           <option value="SELESAI">Selesai</option>
           <option value="BELUM ADA PENGUJI">Belum ada penguji</option>
         </select>
@@ -61,6 +66,41 @@
     <div class="frame" id="frame" aria-live="polite"></div>
     <p class="muted" id="updated" style="margin-top:8px"></p>
   </main>
+
+  <!-- Panel samping: unggah berkas oleh siswa -->
+  <dialog id="dlg" aria-labelledby="dlgTitle">
+    <form id="formUpload" method="dialog" novalidate>
+      <div class="dlg-body">
+        <h2 id="dlgTitle">Unggah berkas</h2>
+        <p class="muted" id="dlgSub" style="margin:4px 0 24px"></p>
+        <div class="field">
+          <label for="uNomor">NISN <span class="req" aria-hidden="true">*</span></label>
+          <input id="uNomor" type="text" inputmode="numeric" autocomplete="off" aria-required="true" aria-describedby="hNomor errNomor">
+          <p class="hint" id="hNomor">Dipakai untuk memastikan berkas ini milik Anda.</p>
+          <div class="err" id="errNomor" role="alert"></div>
+        </div>
+        <div class="field">
+          <label for="uPpt">File PPT <span class="muted">(.ppt, .pptx)</span></label>
+          <input id="uPpt" type="file" accept=".ppt,.pptx" aria-describedby="sPpt errPpt">
+          <p class="hint" id="sPpt"></p>
+          <div class="err" id="errPpt" role="alert"></div>
+        </div>
+        <div class="field">
+          <label for="uLaporan">File laporan TA <span class="muted">(.pdf, .doc, .docx)</span></label>
+          <input id="uLaporan" type="file" accept=".pdf,.doc,.docx" aria-describedby="sLaporan errLaporan">
+          <p class="hint" id="sLaporan"></p>
+          <div class="err" id="errLaporan" role="alert"></div>
+        </div>
+        <div id="dlgErr" class="err" role="alert"></div>
+      </div>
+      <div class="dlg-foot">
+        <div class="actions">
+          <button type="button" class="btn secondary" id="dlgTutup">Tutup</button>
+          <button type="submit" class="btn" id="dlgKirim">Unggah berkas</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
 
   <script src="/seminar/assets/js/config.js"></script>
   <script src="/seminar/assets/js/api.js"></script>
