@@ -31,8 +31,7 @@
         { k: 'ID_SIDANG', label: 'ID sidang', id: true, ph: 'SD001' },
         { k: 'TANGGAL', label: 'Tanggal', type: 'date', req: true },
         { k: 'JENIS_SIDANG', label: 'Jenis sidang', type: 'select', opts: JENIS_OPT },
-        { k: 'NIS', label: 'NIS', req: true },
-        { k: 'NISN', label: 'NISN', ph: '0012345678', hint: 'Dipakai untuk nama file unggahan dan verifikasi siswa. Jika kosong, NIS dipakai.' },
+        { k: 'NISN', label: 'NISN', req: true, ph: '0012345678', hint: 'Nomor induk siswa (NIS = NISN). Dipakai untuk nama file unggahan dan verifikasi siswa.' },
         { k: 'NAMA_SISWA', label: 'Nama siswa', req: true },
         { k: 'KELAS_ASAL', label: 'Kelas asal' },
         { k: 'KELAS_PRODISTIK', label: 'Kelas PRODISTIK' },
@@ -73,12 +72,12 @@
     penilaian: {
       label: 'Penilaian', desc: 'Nilai yang sudah masuk. Hanya dapat dilihat.', readOnly: true, date: true,
       load: () => api('adminGetPenilaian', { token, tanggal: $('#fTanggal')?.value || '' }),
-      cols: ['ID_NILAI', 'ID_PENUGASAN', 'ID_SIDANG', 'ID_PENGUJI', 'JENIS_SIDANG', 'NIS', 'NAMA_SISWA', 'JUDUL_TA',
+      cols: ['ID_NILAI', 'ID_PENUGASAN', 'ID_SIDANG', 'ID_PENGUJI', 'JENIS_SIDANG', 'NISN', 'NAMA_SISWA', 'JUDUL_TA',
         'NILAI_1', 'NILAI_2', 'NILAI_3', 'NILAI_4', 'NILAI_AKHIR', 'WAKTU_INPUT', 'WAKTU_UPDATE', 'STATUS']
     },
     berkas: {
       label: 'Berkas', desc: 'Berkas PPT dan laporan yang diunggah siswa. Hanya dapat dilihat.', readOnly: true, tabel: 'UPLOAD_BERKAS',
-      cols: ['WAKTU', 'NIS', 'NAMA_SISWA', 'KELAS_ASAL', 'JENIS_SIDANG', 'JENIS_BERKAS', 'NAMA_FILE', 'UKURAN_KB', 'LINK_FILE', 'STATUS']
+      cols: ['WAKTU', 'NISN', 'NAMA_SISWA', 'KELAS_ASAL', 'JENIS_SIDANG', 'JENIS_BERKAS', 'NAMA_FILE', 'UKURAN_KB', 'LINK_FILE', 'STATUS']
     },
     pengaturan: {
       label: 'Pengaturan', desc: 'Pengaturan aplikasi. Ubah langsung di sheet PENGATURAN.', readOnly: true, tabel: 'PENGATURAN',
