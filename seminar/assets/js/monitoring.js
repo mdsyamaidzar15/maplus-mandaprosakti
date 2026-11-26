@@ -85,7 +85,7 @@
   function reset() { ['fJenis', 'fKelas', 'fStatus'].forEach(id => ($('#' + id).value = 'SEMUA')); $('#fCari').value = ''; load(); }
 
   /* ---------- Unggah berkas ---------- */
-  const EXT = { PPT: ['ppt', 'pptx'], LAPORAN: ['pdf', 'doc', 'docx'] };
+  const EXT = { PPT: ['ppt', 'pptx', 'pdf'], LAPORAN: ['pdf', 'doc', 'docx'] };
   const FIELDS = [['PPT', '#uPpt', '#errPpt', '#sPpt', 'PPT'], ['LAPORAN', '#uLaporan', '#errLaporan', '#sLaporan', 'laporan']];
 
   function openUpload(r) {
